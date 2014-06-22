@@ -4,19 +4,19 @@
 communicating in an asynchronous manner via unbounded channels.
 %
 The reachability problem is undecidable in the case where the channels are \textit{perfect},
-i.e. channels that behaves as non-lossy queues (\cite{BZ83}) .
+i.e. channels that behave as non-lossy queues\cite{BZ83} .
 %
 Because of the unbounded size of the channels, this message passing programs can be in fact considered as infinite state systems,
-even if the number of the states of the programs is finite.
+even if the number of the states of the program itself is finite.
 %
-Nevertheless, the problem becomes decidable if we consider other than perfect channel semantics for the communication medium,
-namely \textit{lossy}, \textit{stuttering} or \textit{unordered} semantics \cite{AB93,Rack78,phs-IPL2002,lipton}.
+Nevertheless, the problem becomes decidable if we consider other than perfect channel kind of semantics for the communication medium,
+namely \textit{lossy}, \textit{stuttering} or \textit{unordered} channel semantics \cite{AB93,Rack78,phs-IPL2002,lipton}.
 \textit{Lossy} semantic allows loss of messages from any channel at any possible transition of the program.
 \textit{Stuttering} on the other hand allows any message in any channel to be replicated any number of times.
 Finally, no order of arrival is kept in the \textit{unordered} semantic, 
 i.e. the channel is a multiset of messages where only the number of each message is kept.
 %
-It turns out that the decidability state reachability of message passing programs for these semantics
+It turns out that the state reachability of message passing programs for these semantics
 still comes with a high complexity.
 %
 Therefor, different approaches have been suggested in order to reduce the complexity of the reachability problem.
@@ -25,100 +25,93 @@ Most of these approaches consists in some sort of under approximation analysis o
 allowing the system to evolve up to a certain fixed bound, thus limiting the state space that has to be explored
 in order to check the reachability of a given program state.
 %
-An example (\cite{SJ05}) consists in the bounding the number of \textit{context switches} between processes.
+One of these approaches consists in bounding the number of \textit{context switches} between processes \cite{SJ05}.
 %
-Since many bugs appear within a small number of context switches,
+Since many bugs get exposed after a small number of context switches,
 it appears that these kind of approaches are very helpful when it comes to find bugs.
 %
 On the other hand, they can tell about the program safety only up to a certain bound, the one under which the analysis has been carried.
 %
 More specific to message passing communicating programs,
 La Torre et al. considered in \cite{LaTorre08} a bounded context switch analysis for perfect channel communicating processes,
-where processes are allowed to receive from only one channel in a given context.
+where processes are allowed to receive from only one channel in each context.
+
+
+Parosh et al. considered in \cite{AAC13} a different approach, called \textit{bounded phase} analysis.
 %
-Parosh et al. in \cite{AAC13} considered a different approach, called \textit{bounded phase} analysis.
-A \textit{phase} of the program is a run of the program in which each process 
+A \textit{phase} of the program is a run in which each process 
 is either performing send operations or receive operations, but not both.
 %
-The number of send (resp. receive) operations within a sending (reap. receiving) phase
+The number of send (resp. receive) operations within a sending (resp. receiving) phase
 is not bounded, and the number of channels to which processes are sending to (resp. receiving from)
-is only bounded by the number of channels.
+is only bounded by the number of channels composing the system.
 %
-Also, this approach allows multiple processes to be running at the same time.
+Also, this approach does not put any restriction on the length of the
+run or on the size of the buffers.
+%
+Finally, it allows multiple processes to be running at the same time.
 %.
-This approach has been demonstrated in the prototype \textsc{alternator} (\cite{github.alternator}).
+This approach has been demonstrated in a prototype, \textsc{alternator} \cite{github.alternator},
+which proceeds in two steps in order to analyse the program.
 %
-This prototype, where, showed promising results.
+First, it translates the bounded phase reachability problem of the program into the satisfiability problem of quantifier-free Presburger formula.
+Second, it feeds the generated formula to an {\sc smt}-solver.
 %
-We propose in this paper to present the extensions we brought to this tool in order
-to implement the \textit{per process} phase analysis and a certain number of optimisations.
-
-%
-\MPass\ verifies the reachability problem of message-passing programs or protocols in which each process is restricted to performing at most $k$ phases (for some natural number $k$).
-A {\it phase}  is a run where the process performs  either send or receive operations
-(but not both). The bounded-phase  restriction does not limit the \emph{number} of
-sends or receives,  and in particular it does not put any restriction on the length of the
-run or the size of the buffers.
-
-%
-%
-%computation with the phase bounded by some natural number. In each phase, a process can perform 
-%either send transitions or receive transitions (but not both). The transition consisting of no operation, 
-%but just the change of states, can be performed in either of these phases.\\\\
-
-\MPass\ can handle different variants of channel semantics, such as
-{\it lossy}, {\it stuttering}, and {\it multiset} that
-allow the messages inside the channels to be lost,
-duplicated, and re-ordered respectively.
-
-
-
-%
-\MPass\ is based on the framework   described in \cite{AAC13} which translates bounded phase reachability problem  into the satisfiability of quantifier-free Presburger formula in polynomial time, along with several optimizations. This allows  leveraging the full power of state-of-the-art
+This allows leveraging the full power of state-of-the-art
 {\sc smt}-solvers for obtaining a very efficient solution to the bounded-phase reachability problem for all above mentioned semantics. 
+%
+%[Global phase vs Local phase]
+%
+The promising results of this prototype motivated its reimplementation into a more efficient tool, \MPass\, that we present in this paper.
 
+\MPass\ turns the bounded phase state reachability verification task into a push-button exercise.
+Moreover, it comes with the following features:
 
-\MPass\ turns this verification task into a push-button exercise,   it can also  be  applied on a number of message-passing program with promising results. More precisely:
+\begin{itemize}
+% input
+\item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{section:input}.
+%
+\item \MPass\ can handle three different kinds of channel semantics: {\it lossy}, {\it stuttering} or {\it multiset} semantics.
+They allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
+% internal
+\item \MPass\ allows local (per process) bounded phase analysis.
+This analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
+%
+\item Several optimisations have been implemented in \MPass\, especially in the \textsc{smt}-formula generation phase (see section~\ref{section:optim}).
+%
+\item \MPass\ uses the \textsc{z3} {\sc smt}-solver \cite{z3}.
+% output qualitative
+\item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantic).
+%
+\item If the bound on the number of phases increases then the set of explored program behaviours increases.
+In the limit, every run of the programs can then be explored.
+% output quantitative
+\item Users are provided with the computational time needed both by the constraint generation engine and by
+  the \textsc{smt}-solver in order to analyse the reachability of the provided protocol and state.
+%
+\item \MPass\ output is generated in a user friendly manner, by generating a tex file.
+More information regarding this can be found within the tool \cite{github.MPass}.
+%
+\item Finally, \MPass\ is an open source tool which can be interfaced with other \textsc{smt}-solvers.
+\end{itemize}
 
-%Thus, we can use one of the various SMT solvers which, efficiently, comment on the satisfiabilty of the 
-%generated quantifier-free Presburger formula for all the above mentioned semantics.
-%It is created in such a way that it can be applied on a number of message paasing program with promising results.
-
-
-\begin{enumerate}
-\item[$\bullet$] \MPass\ is an open source \cite{github.MPass}
-  verification tool that analyzes reachability problem in message-passing programs having their phase bounded
-\item[$\bullet$] If \MPass\ finds a bug then it is a real bug of the input program.
-
-\item[$\bullet$] If the bound on the number of phases increases  then the set of explored traces increases, and in the limit every run of the programs is then explored.   
-\item[$\bullet$] It converts bounded phase reachability problem into quantifier-free presburger formula and then call 
-  SMT Solver to output the satisfiability results.
-  
-%\item[$\bullet$] it performs reachability analysis for faulty protocols also which differs from therir original 
-%  one at some or many transition.
-\item[$\bullet$] It provides user with the computational time used both by the constraint generation as well as 
-  SMT solver to analyze the complexity of the provided protocol. Details regarding these two extractions are given in \cref{sec:logic}.
-\item[$\bullet$] It provides user with the satisfiability results in an user-friendly manner by generating a separate tex file.
-  More information regarding this can be found within the tool \cite{github.MPass}.
-\end{enumerate}
 
 \subsubsection{Targeted users}
-\MPass\ can be used by these group of users :
+%
+\MPass\ can be used by the following group of users :
 %
 \begin{enumerate}
-\item Various researchers and Computer scientists can use the freely available and open source 
-  code of \MPass\ to compare with other approaches for the verification of message-passing programs, to improve and optimize the implemented techniques (by interfacing with other  other efficient SMT-solver) or by improving the used data structures for handling the protocols, or to target new platforms and programs (e.g., adding shared variables or  other channel semantics).
-  
-  
-  
-  
-%  optimize it further or improve the 
-%  implementation techniques thereby extending its features further   It can also be used
+%
+\item Researchers within ... 
+Various \textbf{researchers} and \textbf{computer scientists} can use the freely available and open source code of \MPass\ to:
+\begin{enumerate}
+\item compare with other approaches for the verification of message-passing programs,
+\item to improve and optimize the implemented techniques (by interfacing with other  other efficient SMT-solver)
+\item or by improving the used data structures for handling the protocols, or to target new platforms and programs (e.g., adding shared variables or  other channel semantics).
+\end{enumerate}  
 %  
-  
-\item Teachers of distributed  systems  and concurrent programming classes can use (and augment) \MPass\ 
+\item \textbf{Teachers} of distributed  systems  and concurrent programming classes can use (and augment) \MPass\ 
   to familiarize their students with message-passing programs.  In particular the precision of \MPass\ can concretely illustrate the difficulty of writing a correct concurrent programs.
-  
 %  
 %  They can even illustrate the effects of protocal 
 %  and reachability settings provided on the running time of the tool.
