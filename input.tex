@@ -1,0 +1,56 @@
+\section{Input format}\label{sec:input}
+
+Examples on which we run our protocols are mostly take from \cite{JRSVgit} 
+which are further described in \cite{MPSV11} and \cite{RSV11}.
+Bounded Retransmission Protocol is also adapted from \cite{AABJ04}.
+
+In ?-?, the authors used a tabular format to specify a protocol (\trextsc{.csv} file)
+from which an \texsc{xml} description of the protocol could be extracted.
+Our tool works directly on \textsc{xml} files.
+More specifically, \MPass\ takes as input a \textsc{settings} file where users can feed the tool with a structured input containing the following informations:
+
+\begin{itemize}
+\item \textsc{xml_file}: Path to \textsc{xml} file where the protocol is specified.
+\item \textsc{channel_semantic}: Either ... .
+\item \textsc{phase bound}: How many phases are allowed per process.
+\item \textsc{bad state}: Which state of which process is considered as bad state, i.e.
+which state of which process should the state reachability analysis be conducted for.
+\end{itemise}
+
+An example of a \texsc{Settings}, which can be found in the \texsc{src} directory is the following:
+\textsc{TEXT FILE}
+
+Protocols are used in the format of {\tt xml-files} present within the tool repository inside the 'Includes' folder. The protocols, thus, can be modified in a simple manner by changing the fields in xml-files. The first task of MPass is to translate the protocols defined in {\tt xml-files} into 
+\emph{Non-Deterministic Finite Automata} (NFA). In order to achieve this, it takes xml-file path of the Protocol 
+as an input and then uses C++ library of {\tt lemon} to translate the protocol into NFA as described below:
+
+\begin{figure}[h]
+\begin{center}
+\begin{tabular}{l@{\hspace{20pt}}}
+$<${\bf rule} id="Q0{\textunderscore\textunderscore}ack1{\textunderscore\textunderscore}INBOUND"{\bf $>$}\\
+\quad {\bf $<$pre$>$}\\
+    \quad \quad {\bf $<$current{\textunderscore}state$>$}Q0{\bf $<$/current{\textunderscore}state$>$}\\
+    \quad \quad {\bf $<$received{\textunderscore}message$>$}ack1{\bf $<$/received{\textunderscore}message$>$}\\
+    \quad \quad {\bf $<$channel$>$}c1{\bf $<$/channel$>$}\\
+  \quad {\bf $<$/pre$>$}\\
+  \quad {\bf $<$post$>$}\\
+    \quad \quad {\bf $<$next{\textunderscore}state$>$}Q1{\bf $<$/next{\textunderscore}state$>$}\\
+     \quad \quad {\bf $<$send{\textunderscore}message$>$}mesg0{\bf $<$/send{\textunderscore}message$>$}\\
+      \quad \quad {\bf $<$channel$>$}c0{\bf $<$/channel$>$}\\
+  \quad {\bf $<$/post$>$}\\
+{\bf $<$/rule$>$}\\
+\end{tabular}
+\end{center}
+\caption{An example of xml code for ABP Protocol}\label{fig:code}
+\end{figure}
+
+The above rule adds two transitions from the state {\tt Q0} to the state {\tt Q1}.
+The first transition defines the rule of receiving the message {\tt ack1} from the channel {\tt c1} 
+whereas the second transition defines the rule of sending the message {\tt mesg0} into the channel {\tt c0}.
+Each process in a protocol contains one or more of  such rules which in together defines the automaton for that 
+process within the given protocol.
+
+If the result of the SMT-solver for these set of formulas is satisfiable (sat), then the \emph{Bad State} is reachable and we have an UNSAFE (U) condition otherwise we have a SAFE (S) condition, ie, 
+\emph{Bad State} is  	 reachable for the given bound.
+
+

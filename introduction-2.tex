@@ -102,19 +102,19 @@ More information regarding this can be found within the tool \cite{github.MPass}
 %
 \begin{enumerate}
 %
-\item Researchers within ... 
-Various \textbf{researchers} and \textbf{computer scientists} can use the freely available and open source code of \MPass\ to:
+\item \textbf{Researchers} and \textbf{computer scientists} can use the freely available and open source code of \MPass\ to:
 \begin{enumerate}
-\item compare with other approaches for the verification of message-passing programs,
-\item to improve and optimize the implemented techniques (by interfacing with other  other efficient SMT-solver)
-\item or by improving the used data structures for handling the protocols, or to target new platforms and programs (e.g., adding shared variables or  other channel semantics).
-\end{enumerate}  
+\item Compare the bounded phase approach with other approaches for the verification of message-passing programs,
+\item Improve and optimize the implemented techniques,
+either by generating a different \textsc{amt}-formula or by using a different \textsc{amt}-solver.
+\item Target new platforms and programs (e.g. by adding shared variables or considering other channel semantics).
+\end{enumerate}
 %  
 \item \textbf{Teachers} of distributed  systems  and concurrent programming classes can use (and augment) \MPass\ 
-  to familiarize their students with message-passing programs.  In particular the precision of \MPass\ can concretely illustrate the difficulty of writing a correct concurrent programs.
-%  
-%  They can even illustrate the effects of protocal 
-%  and reachability settings provided on the running time of the tool.
-\item Software developers who are working on message-passing programs can use \MPass\   to verify their tentative soluteions.
-  It can also be used to check faultiness of a particular protocol by verifying the reachability of an Invalid state.
+  to get their students accustomed with message-passing programs and protocols.
+  In particular, the precision of \MPass\ can concretely illustrates the difficulty of writing a correct distributed protocol or algorithm.
+%
+\item \textbf{Software designers} that are working on message-passing programs can use \MPass\ to evaluate the safety of their tentative solutions.
+  It can also be used to check faultiness of an already used protocol by verifying the reachability of an Invalid state.
+%
 \end{enumerate}
