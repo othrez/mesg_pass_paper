@@ -69,7 +69,7 @@ Moreover, it comes with the following features:
 
 \begin{itemize}
 % input
-\item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{section:input}.
+\item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{sec:input}.
 %
 \item \MPass\ can handle three different kinds of channel semantics: {\it lossy}, {\it stuttering} or {\it multiset} semantics.
 They allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
@@ -77,9 +77,9 @@ They allow the messages inside the channels to be, respectively, lost, duplicate
 \item \MPass\ allows local (per process) bounded phase analysis.
 This analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
 %
-\item Several optimisations have been implemented in \MPass\, especially in the \textsc{smt}-formula generation phase (see section~\ref{section:optim}).
+\item Several optimisations have been implemented in \MPass\, especially in the \textsc{smt}-formula generation phase (see section~\ref{sec:optim}).
 %
-\item \MPass\ uses the \textsc{z3} {\sc smt}-solver \cite{z3}.
+\item \MPass\ uses the \textsc{z3} {\sc smt}-solver \url{http://z3.codeplex.com}.
 % output qualitative
 \item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantic).
 %

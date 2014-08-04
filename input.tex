@@ -1,28 +1,55 @@
-\section{Input format}\label{sec:input}
+\section{Input format}
+\label{sec:input}
 
-Examples on which we run our protocols are mostly take from \cite{JRSVgit} 
+Examples on which we run our protocols are mostly taken from \cite{JRSVgit} 
 which are further described in \cite{MPSV11} and \cite{RSV11}.
-Bounded Retransmission Protocol is also adapted from \cite{AABJ04}.
-
-In ?-?, the authors used a tabular format to specify a protocol (\trextsc{.csv} file)
-from which an \texsc{xml} description of the protocol could be extracted.
-Our tool works directly on \textsc{xml} files.
-More specifically, \MPass\ takes as input a \textsc{settings} file where users can feed the tool with a structured input containing the following informations:
+Bounded Retransmission Protocol protocol is also adapted from \cite{AABJ04}.
+All protocols used for our experiments can be found in the \texttt{Includes/Protocols} folder.
+%
+In \cite{JRSVgit} and in \texttt{alternator}, the authors used a tabular format to specify a protocol (\texttt{.csv} file)
+from which an \xml\ description could be extracted.
+Our tool works directly on the \xml\ description.
+%
+More specifically, \MPass\ takes as input a \texttt{settings} file where users can feed the tool with a structured input containing the following informations:
 
 \begin{itemize}
-\item \textsc{xml_file}: Path to \textsc{xml} file where the protocol is specified.
-\item \textsc{channel_semantic}: Either ... .
+\item \textsc{xml\_file}: Path to \xml\ file where the protocol is specified.
+\item \textsc{channel\_semantic}: Either \texttt{lossy}, \texttt{stuttering} or \texttt{unordered} semantics.
 \item \textsc{phase bound}: How many phases are allowed per process.
-\item \textsc{bad state}: Which state of which process is considered as bad state, i.e.
-which state of which process should the state reachability analysis be conducted for.
-\end{itemise}
+\item \textsc{bad state}: It takes pairs of values.
+%
+First is the name of the process in which the reachability is to be checked and the second is the set of states for which reachability is being checked.NOTE: Bad state for more one process can also be entered one after the other.
+\end{itemize}
 
-An example of a \texsc{Settings}, which can be found in the \texsc{src} directory is the following:
-\textsc{TEXT FILE}
+In order to ask \MPass\ to check the $3$-bounded reachability of state \texttt{Invalid} of process \texttt{RECEIVER} of the \texttt{BRP} protocol
+using the \texttt{lossy} semantic,
+you can feed the tool with the following settings file, which you can find in the \texttt{src} directory of \MPass\ :\\
+\texttt{file ../Includes/Protocols/BRP.xml}\\
+\texttt{semantics lossy}\\
+\texttt{bound 3}\\
+\texttt{bad RECEIVER Invalid}\\
+\texttt{channel\_type process}
 
-Protocols are used in the format of {\tt xml-files} present within the tool repository inside the 'Includes' folder. The protocols, thus, can be modified in a simple manner by changing the fields in xml-files. The first task of MPass is to translate the protocols defined in {\tt xml-files} into 
-\emph{Non-Deterministic Finite Automata} (NFA). In order to achieve this, it takes xml-file path of the Protocol 
-as an input and then uses C++ library of {\tt lemon} to translate the protocol into NFA as described below:
+\subsection*{Protocol specification}
+
+The \texttt{xml} specification of all protocols used for our experiments can be found in the \texttt{Includes/Protocols} folder.
+%
+Variants of these protocols can be specified by modifying their \xml\ specification
+and new protocols can be specified by writing their \xml\ specification.
+%
+An \texttt{xml} protocol description contains:
+\begin{inparaenum}
+\item The name of the protocol. Example: \texttt{Altenating Bit Protocol}.
+\item The communicating channel semantic. Example: \texttt{STUTT\_FIFO} for the stuttering semantic.
+\item The set of messages exchanged between processes.
+\item The set of channels.
+\item A list of process specifications. The specification of a process contains:
+\begin{inparaenum}
+\item The name of the process.
+\item The set of states of the process.
+\item The set of transitions, each one specified as a "rule". An example of a process transition specification is depicted in figure~\ref{fig:xml:trans}.
+\end{inparaenum}
+\end{inparaenum}
 
 \begin{figure}[h]
 \begin{center}
@@ -41,16 +68,14 @@ $<${\bf rule} id="Q0{\textunderscore\textunderscore}ack1{\textunderscore\textund
 {\bf $<$/rule$>$}\\
 \end{tabular}
 \end{center}
-\caption{An example of xml code for ABP Protocol}\label{fig:code}
+\caption{Example of a transition description (\textsc{ABP} Protocol).}
+\label{fig:xml:trans}
 \end{figure}
 
-The above rule adds two transitions from the state {\tt Q0} to the state {\tt Q1}.
-The first transition defines the rule of receiving the message {\tt ack1} from the channel {\tt c1} 
-whereas the second transition defines the rule of sending the message {\tt mesg0} into the channel {\tt c0}.
-Each process in a protocol contains one or more of  such rules which in together defines the automaton for that 
-process within the given protocol.
-
-If the result of the SMT-solver for these set of formulas is satisfiable (sat), then the \emph{Bad State} is reachable and we have an UNSAFE (U) condition otherwise we have a SAFE (S) condition, ie, 
-\emph{Bad State} is  	 reachable for the given bound.
+The above rule specifies two transitions from  state {\tt Q0} to  state {\tt Q1}.
+The first transition consists in receiving message {\tt ack1} from channel {\tt c1}.
+The second transition consists in sending message {\tt mesg0} to the channel {\tt c0}.
+The set of transition rules, together with the set of states define a process.
+The set of processes, together with channel and message definitions, define a protocol.
 
 
