@@ -71,8 +71,7 @@ Moreover, it comes with the following features:
 % input
 \item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{sec:input}.
 %
-\item \MPass\ can handle three different kinds of channel semantics: {\it lossy}, {\it stuttering} or {\it multiset} semantics.
-They allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
+\item \MPass\ can handle three different kinds of channel semantics: {\it lossy}(LCS), {\it stuttering}(SLCS) or {\it multiset-unordered}(UCS) semantics which allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
 % internal
 \item \MPass\ allows local (per process) bounded phase analysis.
 This analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
@@ -81,7 +80,7 @@ This analysis explores more behaviours than the global (per program) bounded pha
 %
 \item \MPass\ uses the \textsc{z3} {\sc smt}-solver \url{http://z3.codeplex.com}.
 % output qualitative
-\item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantic).
+\item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantics).
 %
 \item If the bound on the number of phases increases then the set of explored program behaviours increases.
 In the limit, every run of the programs can then be explored.
@@ -106,7 +105,7 @@ More information regarding this can be found within the tool \cite{github.MPass}
 \begin{enumerate}
 \item Compare the bounded phase approach with other approaches for the verification of message-passing programs,
 \item Improve and optimize the implemented techniques,
-either by generating a different \textsc{amt}-formula or by using a different \textsc{amt}-solver.
+either by generating a different \textsc{SMT}-formula or by using a different \textsc{SMT}-solver.
 \item Target new platforms and programs (e.g. by adding shared variables or considering other channel semantics).
 \end{enumerate}
 %  

@@ -10,12 +10,13 @@ It includes the sources files, protocols specifications in \xml\ and user manual
 
 Various optimization techniques were implemented in order to increase the efficiency of the approach described in  \cite{AAC13}:
 
+<<<<<<< HEAD
 \begin{description}
-\item{Reducing the number of copies per process}
+\item{\textbf{Reducing the number of copies per process:}}
 The original approach consisted in making $k$ copies of each process from the protocol specification.
 Instead of that, we make only two copies per process (send and receive copy).
 %
-\item{Removal of strongly connected component}
+\item{\textbf{Removal of strongly connected component:}}
 We evaluate all the sets of strongly connected components in the send copy of each process. 
 Then, we replace each strongly connected component by two new states.
 We add a send operation between these two newly added states if this operation appears in this set of strongly connected component.
