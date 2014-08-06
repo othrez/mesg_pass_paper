@@ -62,27 +62,6 @@ An \texttt{xml} protocol description contains:
 \end{inparaenum}
 \end{inparaenum}
 
-\begin{figure}[h]
-\begin{center}
-\begin{tabular}{l@{\hspace{20pt}}}
-$<${\bf rule} id="Q0{\textunderscore\textunderscore}ack1{\textunderscore\textunderscore}INBOUND"{\bf $>$}\\
-\quad {\bf $<$pre$>$}\\
-    \quad \quad {\bf $<$current{\textunderscore}state$>$}Q0{\bf $<$/current{\textunderscore}state$>$}\\
-    \quad \quad {\bf $<$received{\textunderscore}message$>$}ack1{\bf $<$/received{\textunderscore}message$>$}\\
-    \quad \quad {\bf $<$channel$>$}c1{\bf $<$/channel$>$}\\
-  \quad {\bf $<$/pre$>$}\\
-  \quad {\bf $<$post$>$}\\
-    \quad \quad {\bf $<$next{\textunderscore}state$>$}Q1{\bf $<$/next{\textunderscore}state$>$}\\
-     \quad \quad {\bf $<$send{\textunderscore}message$>$}mesg0{\bf $<$/send{\textunderscore}message$>$}\\
-      \quad \quad {\bf $<$channel$>$}c0{\bf $<$/channel$>$}\\
-  \quad {\bf $<$/post$>$}\\
-{\bf $<$/rule$>$}\\
-\end{tabular}
-\end{center}
-\caption{Example of a transition description (\textsc{ABP} Protocol).}
-\label{fig:xml:trans}
-\end{figure}
-
 The above rule specifies two transitions from  state {\tt Q0} to  state {\tt Q1}.
 The first transition consists in receiving message {\tt ack1} from channel {\tt c1}.
 The second transition consists in sending message {\tt mesg0} to the channel {\tt c0}.
