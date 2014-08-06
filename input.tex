@@ -3,7 +3,7 @@
 
 Examples on which we run our protocols are mostly taken from \cite{JRSVgit} 
 which are further described in \cite{MPSV11} and \cite{RSV11}.
-Bounded Retransmission Protocol protocol is also adapted from \cite{AABJ04}.
+Bounded Retransmission protocol is also adapted from \cite{AABJ04}.
 All protocols used for our experiments can be found in the \texttt{Includes/Protocols} folder.
 %
 In \cite{JRSVgit} and in \texttt{alternator}, the authors used a tabular format to specify a protocol (\texttt{.csv} file)
@@ -14,11 +14,12 @@ More specifically, \MPass\ takes as input a \texttt{settings} file where users c
 
 \begin{itemize}
 \item \textsc{xml\_file}: Path to \xml\ file where the protocol is specified.
-\item \textsc{channel\_semantic}: Either \texttt{lossy}, \texttt{stuttering} or \texttt{unordered} semantics.
+\item \textsc{channel\_semantic}: Either \texttt{lossy} (\LCS), \texttt{stuttering} (\SLCS) or \texttt{unordered} (\UCS) channel semantic.
 \item \textsc{phase bound}: How many phases are allowed per process.
 \item \textsc{bad state}: It takes pairs of values.
 %
-First is the name of the process in which the reachability is to be checked and the second is the set of states for which reachability is being checked.NOTE: Bad state for more one process can also be entered one after the other.
+First is the name of the process in which the reachability is to be checked and the second is the set of states for which reachability is being checked.
+NOTE: Bad state for more one process can also be entered one after the other.
 \end{itemize}
 
 In order to ask \MPass\ to check the $3$-bounded reachability of state \texttt{Invalid} of process \texttt{RECEIVER} of the \texttt{BRP} protocol

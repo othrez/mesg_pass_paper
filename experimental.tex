@@ -7,7 +7,7 @@ Bounded Retransmission Protocol (BRP) is also adapted from \cite{AABJ04}.
 Columns of both tables should be interpreted as follows:
 
 \begin{inparaenum}
-\item {\bf P} lists the name of the protocol under analysis.
+\item {\bf P} lists the names of the protocols under analysis.
 \item {\bf Bad} indicates both the process and the state of the process for which the state reachability analysis is conducted.
 \item {\bf Sem} indicated the channel semantics used for the analysis: \textit{lossy} (\LCS), \textit{stuttering} (\SLCS) or \textit{unordered} (UCS) channel semantic.
 \item {\bf channel} describes how channels are formed.  More precisely, we provide three different ways for defining the channels:
@@ -17,15 +17,15 @@ Columns of both tables should be interpreted as follows:
 \item {\bf process:} There is exactly one channel per process.
 \end{inparaenum}
 We used the \textbf{process} kind of channel specification.
-\item {\bf Constraint Generation} (\textbf{Const. Gen.}), \textbf{SMT} and {\bf Total time} lists, respectively, the time taken to generate  the \smt\-formula,
-the time taken by the \smt\ solver to check the satisfiability of that formula and the total time of the analysis.
-\item {\bf Assert} lists the number of assertions fed to the SMT solver,
+\item {\bf Constraint Generation} (\textbf{Const. Gen.}), \textbf{\SMT} and {\bf Total time} lists, respectively, the time taken to generate  the \SMT-formula,
+the time taken by the \SMT\ solver to check the satisfiability of that formula and the total time of the analysis.
+\item {\bf Assert} lists the number of assertions fed to the \SMT\ solver,
 \item {\bf Ph.} indicated the bound on the number of phases, and finally,
 \item {\bf Res} gives the result of the analysis. The results are listed as:
 \begin{inparaenum}
-\item {\bf U} for Unsafe, i.e. the bad state is reachable (the \smt\ formula is satisfiable), or
+\item {\bf U} for Unsafe, i.e. the bad state is reachable (the \SMT\ formula is satisfiable), or
 \item {\bf S} for possibly safe, i.e. the bad state is not reachable under the bounded-phase assumption and for the specified channel semantic,
-(the \smt\ formula is unsatisfiable).
+(the \SMT\ formula is unsatisfiable).
 \end{inparaenum}
 \end{inparaenum}
 
@@ -38,7 +38,7 @@ in the \texttt{docs} folder.
         \begin{tabular}{  |ccc|c|cccc|c|cc|}
         \hline
         \hline
-        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & {\bf SMT} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
+        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\SMT} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
         \hline
         \hline
         ABP & \shortstack{RECEIVER Invalid} & UCS && 0.07 sec & 74 sec & 74.07 sec & 4025 && 4 & U(sat) \\ \hline
@@ -63,7 +63,7 @@ in the \texttt{docs} folder.
         \begin{tabular}{ |ccc|c|cccc|c|cc|}
         \hline
         \hline
-        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & {\bf SMT} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
+        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\SMT} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
         \hline
         \hline
         ABP\textunderscore F & \shortstack{RECEIVER Invalid} & SLCS &  & 0.04 sec & 1 sec & 1.04 sec & 1275 && 2 & U(sat) \\ \hline

@@ -55,10 +55,10 @@ This approach has been demonstrated in a prototype, \textsc{alternator} \cite{gi
 which proceeds in two steps in order to analyse the program.
 %
 First, it translates the bounded phase reachability problem of the program into the satisfiability problem of quantifier-free Presburger formula.
-Second, it feeds the generated formula to an {\sc smt}-solver.
+Second, it feeds the generated formula to an \SMT-solver.
 %
 This allows leveraging the full power of state-of-the-art
-{\sc smt}-solvers for obtaining a very efficient solution to the bounded-phase reachability problem for all above mentioned semantics. 
+\SMT-solvers for obtaining a very efficient solution to the bounded-phase reachability problem for all above mentioned semantics. 
 %
 %[Global phase vs Local phase]
 %
@@ -71,14 +71,14 @@ Moreover, it comes with the following features:
 % input
 \item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{sec:input}.
 %
-\item \MPass\ can handle three different kinds of channel semantics: {\it lossy}(LCS), {\it stuttering}(SLCS) or {\it multiset-unordered}(UCS) semantics which allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
+\item \MPass\ can handle three different kinds of channel semantics: {\it lossy} (\LCS), {\it stuttering} (\SLCS) and {\it multiset-unordered} (\UCS) semantics which allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
 % internal
 \item \MPass\ allows local (per process) bounded phase analysis.
 This analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
 %
-\item Several optimisations have been implemented in \MPass\, especially in the \textsc{smt}-formula generation phase (see section~\ref{sec:optim}).
+\item Several optimisations have been implemented in \MPass\, especially in the \SMT-formula generation phase (see section~\ref{sec:optim}).
 %
-\item \MPass\ uses the \textsc{z3} {\sc smt}-solver \url{http://z3.codeplex.com}.
+\item \MPass\ uses the \textsc{z3} \SMT-solver \url{http://z3.codeplex.com}.
 % output qualitative
 \item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantics).
 %
@@ -86,12 +86,12 @@ This analysis explores more behaviours than the global (per program) bounded pha
 In the limit, every run of the programs can then be explored.
 % output quantitative
 \item Users are provided with the computational time needed both by the constraint generation engine and by
-  the \textsc{smt}-solver in order to analyse the reachability of the provided protocol and state.
+  the \SMT-solver in order to analyse the reachability of the provided protocol and state.
 %
 \item \MPass\ output is generated in a user friendly manner, by generating a tex file.
 More information regarding this can be found within the tool \cite{github.MPass}.
 %
-\item Finally, \MPass\ is an open source tool which can be interfaced with other \textsc{smt}-solvers.
+\item Finally, \MPass\ is an open source tool which can be interfaced with other \SMT-solvers.
 \end{itemize}
 
 
@@ -105,7 +105,7 @@ More information regarding this can be found within the tool \cite{github.MPass}
 \begin{enumerate}
 \item Compare the bounded phase approach with other approaches for the verification of message-passing programs,
 \item Improve and optimize the implemented techniques,
-either by generating a different \textsc{SMT}-formula or by using a different \textsc{SMT}-solver.
+either by generating a different \SMT-formula or by using a different \SMT-solver.
 \item Target new platforms and programs (e.g. by adding shared variables or considering other channel semantics).
 \end{enumerate}
 %  
