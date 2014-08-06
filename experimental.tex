@@ -17,15 +17,15 @@ Columns of both tables should be interpreted as follows:
 \item {\bf process:} There is exactly one channel per process.
 \end{inparaenum}
 We used the \textbf{process} kind of channel specification.
-\item {\bf Constraint Generation} (\textbf{Const. Gen.}), \textbf{\SMT} and {\bf Total time} lists, respectively, the time taken to generate  the \SMT-formula,
-the time taken by the \SMT\ solver to check the satisfiability of that formula and the total time of the analysis.
-\item {\bf Assert} lists the number of assertions fed to the \SMT\ solver,
+\item {\bf Constraint Generation} (\textbf{Const. Gen.}), \textbf{\Smt} and {\bf Total time} lists, respectively, the time taken to generate  the \Smt-formula,
+the time taken by the \Smt\ solver to check the satisfiability of that formula and the total time of the analysis.
+\item {\bf Assert} lists the number of assertions fed to the \Smt\ solver,
 \item {\bf Ph.} indicated the bound on the number of phases, and finally,
 \item {\bf Res} gives the result of the analysis. The results are listed as:
 \begin{inparaenum}
-\item {\bf U} for Unsafe, i.e. the bad state is reachable (the \SMT\ formula is satisfiable), or
+\item {\bf U} for Unsafe, i.e. the bad state is reachable (the \Smt\ formula is satisfiable), or
 \item {\bf S} for possibly safe, i.e. the bad state is not reachable under the bounded-phase assumption and for the specified channel semantic,
-(the \SMT\ formula is unsatisfiable).
+(the \Smt\ formula is unsatisfiable).
 \end{inparaenum}
 \end{inparaenum}
 
@@ -34,11 +34,11 @@ in the \texttt{docs} folder.
 
 \begin{table}
   \begin{center}
-    {\scriptsize{
+    %{\scriptsize{
         \begin{tabular}{  |ccc|c|cccc|c|cc|}
         \hline
         \hline
-        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\SMT} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
+        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\Smt} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
         \hline
         \hline
         ABP & \shortstack{RECEIVER Invalid} & UCS && 0.07 sec & 74 sec & 74.07 sec & 4025 && 4 & U(sat) \\ \hline
@@ -51,19 +51,20 @@ in the \texttt{docs} folder.
         STP & \shortstack{A Invalid} & LCS && 0.02 sec & 0 sec & 0.02 sec & 1348 && 4 & S(unsat) \\ \hline
         STP & \shortstack{A Invalid} & SLCS && 0.02 sec & 0 sec & 0.02 sec & 1348 && 4 & S(unsat) \\ \hline
         \hline
-        \end{tabular}} 
-    }
+        \end{tabular}
+        %} 
+    %}
   \end{center}
 \caption{Verification Results for examples from \cite{MPSV11} and \cite{JRSVgit}}\label{tbl:experiments}
 \end{table}
 
 \begin{table}
   \begin{center}
-    {\scriptsize{
+    %{\scriptsize{
         \begin{tabular}{ |ccc|c|cccc|c|cc|}
         \hline
         \hline
-        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\SMT} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
+        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\Smt} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
         \hline
         \hline
         ABP\textunderscore F & \shortstack{RECEIVER Invalid} & SLCS &  & 0.04 sec & 1 sec & 1.04 sec & 1275 && 2 & U(sat) \\ \hline
@@ -73,8 +74,9 @@ in the \texttt{docs} folder.
         Synchronous\textunderscore F & \shortstack{B Invalid} & SLCS &  & 0.02 sec & 0 sec & 0.02 sec & 713 && 3 & U(sat) \\ \hline
         Synchronous\textunderscore F & \shortstack{B Invalid} & UCS &  & 0.02 sec & 0 sec & 0.02 sec & 713 && 3 & U(sat) \\ \hline
         \hline
-        \end{tabular}} 
-    }
+        \end{tabular}
+        %} 
+    %}
   \end{center}
 \caption{Verification Results for buggy (faulty) examples}\label{tbl:experiments_f}
 \end{table}
