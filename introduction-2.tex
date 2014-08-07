@@ -42,17 +42,42 @@ Parosh et al. considered in \cite{AAC13} a different approach, called \textit{bo
 A \textit{phase} of the program is a run in which each process 
 is either performing send operations or receive operations, but not both.
 %
-The number of send (resp. receive) operations within a sending (resp. receiving) phase
-is not bounded, and the number of channels to which processes are sending to (resp. receiving from)
+For instance, consider a program composed of two processes $p_1$ and $p_2$.
+A run of this program consists of only one phase if the following conditions are met:
+\begin{inparaenum}[i)]
+\item $p_1$ is either receiving or sending messages, but not both, and
+\item $p_2$ is either receiving or sending messages, but not both.
+\end{inparaenum}
+%
+If $p_1$ is only receiving (resp. sending) messages, we say that $p_1$ is in a local \textit{receiving} (resp. \textit{sending}) phase.
+%
+In the case where one process (e.g. $p_1$) switches from receiving to sending or from sending to receiving,
+then two phases are needed in order to describe the run of the program.
+%
+In that sense, a phase is \textit{local} to each process,
+and a run of the program contains one phase
+if the run of each one of its processes is composed of only one local phase.
+%
+The number of send and receive operations within a phase is not bounded,
+and the number of channels to which processes are sending to (resp. receiving from)
 is only bounded by the number of channels composing the system.
 %
 Also, this approach does not put any restriction on the length of the
 run or on the size of the buffers.
 %
-Finally, it allows multiple processes to be running at the same time.
-%.
-This approach has been demonstrated in a prototype, \textsc{alternator} \cite{github.alternator}.
-The tool proceeds in two steps in order to analyse the program.
+Finally, it allows multiple processes to be running at the same time and allows an arbitrary number of context switches.
+
+A variant of this approach has been demonstrated in a prototype, \textsc{alternator} \cite{github.alternator}.
+%
+The phase in this variant is \textit{global}, i.e. phases are defined not for each process, but for the whole system.
+%
+For instance, consider a run of the program where one process $p$ is performing receive and local actions only.
+Process $p$ is in a local receiving phase.
+The run of the program is composed of only one global phase if all other processes composing the program are also in a local receiving phase.
+%
+This variant is more coarse-grained than the local (per-process) approach.
+%
+The tool \textsc{alternator} proceeds in two steps in order to analyse the program.
 %
 First, it translates the bounded phase reachability problem of the program into the satisfiability problem of quantifier-free Presburger formula.
 Second, it feeds the generated formula to an \Smt-solver.
@@ -71,10 +96,10 @@ Moreover, it comes with the following features:
 % input
 \item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{sec:input}.
 %
-\item \MPass\ can handle three different kinds of channel semantics: {\it lossy} (\LCS), {\it stuttering} (\SLCS) and {\it multiset-unordered} (\UCS) semantics which allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
+\item \MPass\ can handle three different kinds of channel semantics: {\it lossy} (\Lcs), {\it stuttering} (\Slcs) and {\it multiset-unordered} (\Ucs) semantics which allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
 % internal
-\item \MPass\ allows local (per process) bounded phase analysis.
-This analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
+\item \MPass\ allows a local (per process) bounded phase analysis.
+This fine grained analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
 %
 \item Several optimisations have been implemented in \MPass, in particular in the \Smt-formula generation phase (see section~\ref{sec:optim}).
 %

@@ -1,56 +1,72 @@
 \section{Experimental Results}
 
 \Cref{tbl:experiments} displays the results of running \MPass\ tool on  some examples;
-whereas in \Cref{tbl:experiments_f}, we show the  results of running \MPass\ on some protocols which are intentionally modified to introduced some errors.
+whereas \Cref{tbl:experiments_f} shows the results of running \MPass\ on some protocols which were intentionally modified in order to introduce some errors.
+%
 The displayed  examples are   taking  from \cite{JRSVgit}  which are further described in \cite{MPSV11} and \cite{RSV11}.
-Bounded Retransmission Protocol (BRP) is also adapted from \cite{AABJ04}.
+%
+Bounded Retransmission Protocol (\Brp) is also adapted from \cite{AABJ04}.
+
+
 Columns of both tables should be interpreted as follows:
-
+%
 \begin{inparaenum}
-\item {\bf P} lists the names of the protocols under analysis.
+\item {\bf P} lists the name of the protocol under analysis.
 \item {\bf Bad} indicates both the process and the state of the process for which the state reachability analysis is conducted.
-\item {\bf Sem} indicated the channel semantics used for the analysis: \textit{lossy} (\LCS), \textit{stuttering} (\SLCS) or \textit{unordered} (UCS) channel semantic.
-\item {\bf channel} describes how channels are formed.  More precisely, we provide three different ways for defining the channels:
-\begin{inparaenum}
-\item {\bf xml:}  Channels are specified in the \xml file of the protocol.
-\item {\bf prefix:} Channels are constructed based on the first alphabet of the messages.
-\item {\bf process:} There is exactly one channel per process.
-\end{inparaenum}
-We used the \textbf{process} kind of channel specification.
-\item {\bf Constraint Generation} (\textbf{Const. Gen.}), \textbf{\Smt} and {\bf Total time} lists, respectively, the time taken to generate  the \Smt-formula,
-the time taken by the \Smt\ solver to check the satisfiability of that formula and the total time of the analysis.
-\item {\bf Assert} lists the number of assertions fed to the \Smt\ solver,
-\item {\bf Ph.} indicated the bound on the number of phases, and finally,
-\item {\bf Res} gives the result of the analysis. The results are listed as:
-\begin{inparaenum}
-\item {\bf U} for Unsafe, i.e. the bad state is reachable (the \Smt\ formula is satisfiable), or
-\item {\bf S} for possibly safe, i.e. the bad state is not reachable under the bounded-phase assumption and for the specified channel semantic,
-(the \Smt\ formula is unsatisfiable).
-\end{inparaenum}
+\item {\bf Sem} indicated the channel semantics used for the analysis: \textit{lossy} (\Lcs), \textit{stuttering} (\Slcs) or \textit{unordered} (\Ucs) channel semantic.
+%\item {\bf channel} describes how channels are formed.  More precisely, we provide three different ways for defining the channels:
+%\begin{inparaenum}
+%\item {\bf xml:}  Channels are specified in the \xml file of the protocol.
+%\item {\bf prefix:} Channels are constructed based on the first alphabet of the messages.
+%\item {\bf process:} There is exactly one channel per process.
+%\end{inparaenum}
+%We used the \textbf{process} kind of channel specification.
+\item Constraint Generation (\textbf{Const. Gen.}),
+\item \textbf{\Smt\ Check} and
+\item {\bf Total time} lists, respectively, the time taken by \MPass\ to generate  the \Smt-formula,
+the time taken by the \Smt\ solver \texttt{z3} to check the satisfiability of that formula and the total time of the analysis
+(time is given in seconds).
+\item {\bf Assert} lists the number of assertions fed to the \Smt\ solver.
+\item {\bf Ph.} indicated the bound on the number of phases. Finally,
+\item {\bf Res} gives the result of the analysis. The result is either \textbf{Unsafe} if the bad state is reachable (i.e. the \Smt\ formula is satisfiable), or
+\textbf{Safe}  if the bad state was not reachable under the bounded-phase assumption and for the considered channel semantic
+(i.e. the \Smt\ formula is unsatisfiable).
 \end{inparaenum}
 
-Results displayed here are for few protocols only. Rest of the results are available online at \cite{github.MPass}
-in the \texttt{docs} folder.
+Results displayed here are for few protocols only. Rest of the results are available online at \cite{github.MPass} in the \texttt{docs} folder.
 
 \begin{table}
   \begin{center}
     %{\scriptsize{
-        \begin{tabular}{  |ccc|c|cccc|c|cc|}
-        \hline
-        \hline
-        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\Smt} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
-        \hline
-        \hline
-        ABP & \shortstack{RECEIVER Invalid} & UCS && 0.07 sec & 74 sec & 74.07 sec & 4025 && 4 & U(sat) \\ \hline
-        ABP & \shortstack{RECEIVER Invalid} & LCS && 0.04 sec & 1 sec & 1.04 sec & 2519 && 3 & S(unsat) \\ \hline
-        ABP & \shortstack{RECEIVER Invalid} & SLCS && 0.03 sec & 2 sec & 2.03 sec & 2519 && 3 & S(unsat) \\ \hline
-        BRP & \shortstack{RECEIVER Invalid} & UCS && 0.3 sec & 2 sec & 2.3 sec & 23461 && 3 & S(unsat) \\ \hline
-        BRP & \shortstack{RECEIVER Invalid} & LCS && 0.28 sec & 2 sec & 2.28 sec & 23461 && 3 & S(unsat) \\ \hline
-        BRP & \shortstack{RECEIVER Invalid} & SLCS && 0.28 sec & 1 sec & 1.28 sec & 23461 && 3 & S(unsat) \\ \hline
-        STP & \shortstack{A Invalid} & UCS && 0.03 sec & 4 sec & 4.03 sec & 2354 && 6 & U(sat) \\ \hline
-        STP & \shortstack{A Invalid} & LCS && 0.02 sec & 0 sec & 0.02 sec & 1348 && 4 & S(unsat) \\ \hline
-        STP & \shortstack{A Invalid} & SLCS && 0.02 sec & 0 sec & 0.02 sec & 1348 && 4 & S(unsat) \\ \hline
-        \hline
+        \begin{tabular}{ " c | c | c " c | c | c | c " c | c " }
+	
+	\noalign{\hrule height 1pt}
+
+        \multicolumn{1}{"c}{\textbf{P}} &
+        \multicolumn{1}{c}{\textbf{Bad}} &
+        \multicolumn{1}{c"}{\textbf{Sem}} &
+        \multicolumn{1}{c}{\textbf{\shortstack{Const. \\ gen.}}} &
+        \multicolumn{1}{c}{\textbf{\shortstack{\Smt \\ Check}}} &
+        \multicolumn{1}{c}{\textbf{\shortstack{Total \\ time}}} &
+        \multicolumn{1}{c"}{\textbf{\shortstack{Assert. \\ Nb.}}} &
+        \multicolumn{1}{c}{\textbf{Ph.}} &
+        \multicolumn{1}{c"}{\textbf{Res}} \\
+
+	\hline
+	\hline
+	
+        \Abp & \shortstack{RECEIVER, Invalid} & \Ucs & 0.07  & 74  & 74.07  & 4025 & 4 & Unsafe \\ \hline
+        \Abp & \shortstack{RECEIVER, Invalid} & \Lcs & 0.04  & 1  & 1.04  & 2519 & 3 & Safe \\ \hline
+        \Abp & \shortstack{RECEIVER, Invalid} & \Slcs & 0.03  & 2  & 2.03  & 2519 & 3 & Safe \\ \hline
+        \Brp & \shortstack{RECEIVER, Invalid} & \Ucs & 0.3  & 2  & 2.3  & 23461& 3 & Safe \\ \hline
+        \Brp & \shortstack{RECEIVER, Invalid} & \Lcs & 0.28  & 2  & 2.28  & 23461 & 3 & Safe \\ \hline
+        \Brp & \shortstack{RECEIVER, Invalid} & \Slcs & 0.28  & 1  & 1.28  & 23461 & 3 & Safe \\ \hline
+        \Stp & \shortstack{A, Invalid} & \Ucs & 0.03  & 4  & 4.03  & 2354 & 6 & Unsafe \\ \hline
+        \Stp & \shortstack{A, Invalid} & \Lcs & 0.02  & 0  & 0.02  & 1348 & 4 & Safe \\ \hline
+        \Stp & \shortstack{A, Invalid} & \Slcs & 0.02  & 0  & 0.02  & 1348 & 4 & Safe \\
+
+	\noalign{\hrule height 1 pt}
+
         \end{tabular}
         %} 
     %}
@@ -58,22 +74,43 @@ in the \texttt{docs} folder.
 \caption{Verification Results for examples from \cite{MPSV11} and \cite{JRSVgit}}\label{tbl:experiments}
 \end{table}
 
+\Cref{tbl:experiments} shows that seven out of nine examples have been proved by \MPass\ to be safe in less than three seconds.
+Also, \MPass\ found two safe examples to be faulty when we raised the phase bound from 3 to 4 for \Abp and from 4 to 6 for \Stp.
+In both cases, the \texttt{unordered} channel semantic has been considered.
+It seems that this particular channel semantic exposes more false negatives than the stuttering and the lossy one.
+Also, it seems that by rising the phase bound, the reachability analysis explores more behaviours of the system in general.
+%
+All (faulty) examples listed in \Cref{tbl:experiments_f} on the other hand, have been proved to be unsafe in less than two seconds and within less than three phases.
+
 \begin{table}
   \begin{center}
     %{\scriptsize{
-        \begin{tabular}{ |ccc|c|cccc|c|cc|}
+        \begin{tabular}{ " c | c | c " c | c | c | c " c | c " }
+	
+	\noalign{\hrule height 1pt}
+
+        \multicolumn{1}{"c}{\textbf{P}} &
+        \multicolumn{1}{c}{\textbf{Bad}} &
+        \multicolumn{1}{c"}{\textbf{Sem}} &
+        \multicolumn{1}{c}{\textbf{\shortstack{Const. \\ gen.}}} &
+        \multicolumn{1}{c}{\textbf{\shortstack{\Smt \\ Check}}} &
+        \multicolumn{1}{c}{\textbf{\shortstack{Total \\ time}}} &
+        \multicolumn{1}{c"}{\textbf{\shortstack{Assert. \\ Nb.}}} &
+        \multicolumn{1}{c}{\textbf{Ph.}} &
+        \multicolumn{1}{c"}{\textbf{Res}} \\
+        
         \hline
         \hline
-        {\bf P} & {\bf Bad} & {\bf Sem} && {\bf \shortstack{Const. \\ gen.}} & \textbf{\Smt} & {\bf \shortstack{Total \\ time}} & {\bf Assert} && {\bf Ph.} & {\bf Res} \\
-        \hline
-        \hline
-        ABP\textunderscore F & \shortstack{RECEIVER Invalid} & SLCS &  & 0.04 sec & 1 sec & 1.04 sec & 1275 && 2 & U(sat) \\ \hline
-        ABP\textunderscore F & \shortstack{RECEIVER Invalid} & UCS &  & 0.04 sec & 1 sec & 1.04 sec & 1275 && 2 & U(sat) \\ \hline
-        SlidingWindow\textunderscore F & \shortstack{RECEIVER Invalid} & SLCS &  & 0.02 sec & 0 sec & 0.02 sec & 913 && 1 & U(sat) \\ \hline
-        SlidingWindow\textunderscore F & \shortstack{RECEIVER Invalid} & UCS &  & 0.03 sec & 0 sec & 0.03 sec & 913 && 1 & U(sat) \\ \hline
-        Synchronous\textunderscore F & \shortstack{B Invalid} & SLCS &  & 0.02 sec & 0 sec & 0.02 sec & 713 && 3 & U(sat) \\ \hline
-        Synchronous\textunderscore F & \shortstack{B Invalid} & UCS &  & 0.02 sec & 0 sec & 0.02 sec & 713 && 3 & U(sat) \\ \hline
-        \hline
+        
+        \AbpF & \shortstack{RECEIVER, Invalid} & \Slcs & 0.04  & 1  & 1.04  & 1275 & 2 & Unsafe \\ \hline
+        \AbpF & \shortstack{RECEIVER, Invalid} & \Ucs & 0.04  & 1  & 1.04  & 1275 & 2 & Unsafe \\ \hline
+        \SlideF & \shortstack{RECEIVER, Invalid} & \Slcs & 0.02  & 0  & 0.02  & 913 & 1 & Unsafe \\ \hline
+        \SlideF & \shortstack{RECEIVER, Invalid} & \Ucs & 0.03  & 0  & 0.03  & 913 & 1 & Unsafe \\ \hline
+        \SynchF & \shortstack{B, Invalid} & \Slcs & 0.02  & 0  & 0.02  & 713 & 3 & Unsafe \\ \hline
+        \SynchF & \shortstack{B, Invalid} & \Ucs & 0.02  & 0  & 0.02  & 713 & 3 & Unsafe \\
+        
+	\noalign{\hrule height 1 pt}
+        
         \end{tabular}
         %} 
     %}

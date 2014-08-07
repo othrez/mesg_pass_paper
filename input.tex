@@ -14,18 +14,19 @@ More specifically, \MPass\ takes as input a \texttt{settings} file where users c
 
 \begin{itemize}
 \item \textsc{xml\_file}: Path to \xml\ file where the protocol is specified.
-\item \textsc{channel\_semantic}: Either \texttt{lossy} (\LCS), \texttt{stuttering} (\SLCS) or \texttt{unordered} (\UCS) channel semantic.
+\item \textsc{channel\_semantic}: Either \texttt{lossy} (\Lcs), \texttt{stuttering} (\Slcs) or \texttt{unordered} (\Ucs) channel semantic.
 \item \textsc{phase bound}: How many phases are allowed per process.
 \item \textsc{bad state}: It takes pairs of values.
 %
-First is the name of the process in which the reachability is to be checked and the second is the set of states for which reachability is being checked.
-NOTE: Bad state for more one process can also be entered one after the other.
+First is the name of the process,  second is the (bad) control state (of that process) for which state reachability is to be checked.
+%
+Note that several bad states can be entered.
 \end{itemize}
 
 For instance, in order to ask \MPass\ to check the $3$-bounded reachability
-of the state \texttt{Invalid} of the process \texttt{RECEIVER} of the \texttt{BRP} protocol
+of the state \texttt{Invalid} of the process \texttt{RECEIVER} of the \Brp protocol
 using the \texttt{lossy} semantic,
-the user can feed the tool with the following settings file, which you can find in the \texttt{src} directory of \MPass\:
+the user can feed the tool with the following settings file, which you can find in the \texttt{src} directory of \MPass:
 
 \begin{figure}[h]
 \begin{center}
@@ -61,6 +62,27 @@ An \texttt{xml} protocol description contains:
 \item The set of transitions, each one specified as an \Xml\ "rule". An example of a process transition specification is depicted in figure~\ref{fig:xml:trans}.
 \end{inparaenum}
 \end{inparaenum}
+
+\begin{figure}[h]
+\begin{center}
+\begin{tabular}{l@{\hspace{20pt}}}
+$<${\bf rule} id="Q0{\textunderscore\textunderscore}ack1{\textunderscore\textunderscore}INBOUND"{\bf $>$}\\
+\quad {\bf $<$pre$>$}\\
+    \quad \quad {\bf $<$current{\textunderscore}state$>$}Q0{\bf $<$/current{\textunderscore}state$>$}\\
+    \quad \quad {\bf $<$received{\textunderscore}message$>$}ack1{\bf $<$/received{\textunderscore}message$>$}\\
+    \quad \quad {\bf $<$channel$>$}c1{\bf $<$/channel$>$}\\
+  \quad {\bf $<$/pre$>$}\\
+  \quad {\bf $<$post$>$}\\
+    \quad \quad {\bf $<$next{\textunderscore}state$>$}Q1{\bf $<$/next{\textunderscore}state$>$}\\
+     \quad \quad {\bf $<$send{\textunderscore}message$>$}mesg0{\bf $<$/send{\textunderscore}message$>$}\\
+      \quad \quad {\bf $<$channel$>$}c0{\bf $<$/channel$>$}\\
+  \quad {\bf $<$/post$>$}\\
+{\bf $<$/rule$>$}\\
+\end{tabular}
+\end{center}
+\label{fig:xml:trans}
+\caption{\Xml\ representation of process transition (of the \Abp protocol)}\label{fig:code}
+\end{figure}
 
 The above rule specifies two transitions from  state {\tt Q0} to  state {\tt Q1}.
 The first transition consists in receiving message {\tt ack1} from channel {\tt c1}.
