@@ -3,28 +3,28 @@
 
 Examples on which we run our protocols are mostly taken from \cite{JRSVgit} 
 which are further described in \cite{MPSV11} and \cite{RSV11}.
-Bounded Retransmission protocol is also adapted from \cite{AABJ04}.
+Bounded Retransmission Protocol (\Brp) is also adapted from \cite{AABJ04}.
 All protocols used for our experiments can be found in the \texttt{Includes/Protocols} folder.
 %
-In \cite{JRSVgit} and in \texttt{alternator}, the authors used a tabular format to specify a protocol (\texttt{.csv} file)
-from which an \xml\ description could be extracted.
-Our tool works directly on the \xml\ description.
+In \cite{JRSVgit} and in \alternator, the authors used a tabular format to specify a protocol (\texttt{.csv} file)
+from which an \Xml\ description could be extracted.
+Our tool works directly on the \Xml\ description.
 %
 More specifically, \MPass\ takes as input a \texttt{settings} file where users can feed the tool with a structured input containing the following informations:
 
-\begin{itemize}
-\item \textsc{xml\_file}: Path to \xml\ file where the protocol is specified.
-\item \textsc{channel\_semantic}: Either \texttt{lossy} (\Lcs), \texttt{stuttering} (\Slcs) or \texttt{unordered} (\Ucs) channel semantic.
-\item \textsc{phase bound}: How many phases are allowed per process.
-\item \textsc{bad state}: It takes pairs of values.
+\begin{description}
+\item[\Xml\ file:] Path to the \Xml\ file where the protocol is specified.
+\item[Channel semantic:] Either \texttt{lossy} (\Lcs), \texttt{stuttering} (\Slcs) or \texttt{unordered} (\Ucs) channel semantic.
+\item[Phase bound:] How many phases are allowed per process.
+\item[Bad state:] It takes pairs of values.
 %
-First is the name of the process,  second is the (bad) control state (of that process) for which state reachability is to be checked.
+First is the name of the process,  second is the (bad) state (of that process) for which state reachability is to be checked.
 %
 Note that several bad states can be entered.
-\end{itemize}
+\end{description}
 
-For instance, in order to ask \MPass\ to check the $3$-bounded reachability
-of the state \texttt{Invalid} of the process \texttt{RECEIVER} of the \Brp protocol
+For instance, in order to ask \MPass\ to check the $3$-phase-bounded reachability
+of the state \texttt{Invalid} of the process \texttt{RECEIVER} of the \Brp\ protocol
 using the \texttt{lossy} semantic,
 the user can feed the tool with the following settings file, which you can find in the \texttt{src} directory of \MPass:
 
@@ -44,22 +44,22 @@ the user can feed the tool with the following settings file, which you can find 
 
 \subsubsection*{Protocol specification.}
 
-The \texttt{xml} specification of all protocols used for our experiments can be found in the \texttt{Includes/Protocols} folder.
+The \Xml\ specification of all protocols used for our experiments can be found in the \texttt{Includes/Protocols} folder.
 %
-Variants of these protocols can be specified by modifying their \xml\ specification.
-Also, new protocols can be specified by writing their \xml\ specification.
+Variants of these protocols can be specified by modifying their corresponding \Xml\ specification.
+Also, new protocols can be specified by writing a new \xml\ specification.
 %
-An \texttt{xml} protocol description contains:
+An \Xml\ protocol description contains:
 \begin{inparaenum}
 \item The name of the protocol. Example: \texttt{Altenating Bit Protocol}.
-\item The communicating channel semantic. Example: \texttt{STUTT\_FIFO} for the stuttering semantic.
+%\item The communicating channel semantic. Example: \texttt{STUTT\_FIFO} for the stuttering semantic.
 \item The set of messages exchanged between processes.
 \item The set of channels.
-\item A list of process specifications. The specification of a process contains:
+\item A list of process specifications. The specification of each process contains:
 \begin{inparaenum}
-\item The name of the process.
-\item The set of states of the process.
-\item The set of transitions, each one specified as an \Xml\ "rule". An example of a process transition specification is depicted in figure~\ref{fig:xml:trans}.
+\item The name of the process,
+\item the set of states of the process and
+\item the set of transitions, each transition specified as an \Xml\ "rule". An example of a process transition specification is depicted in figure~\ref{fig:xml:trans}.
 \end{inparaenum}
 \end{inparaenum}
 
@@ -81,7 +81,7 @@ $<${\bf rule} id="Q0{\textunderscore\textunderscore}ack1{\textunderscore\textund
 \end{tabular}
 \end{center}
 \label{fig:xml:trans}
-\caption{\Xml\ representation of process transition (of the \Abp protocol)}\label{fig:code}
+\caption{\Xml\ representation of process transition (of the \Abp\ protocol)}\label{fig:code}
 \end{figure}
 
 The above rule specifies two transitions from  state {\tt Q0} to  state {\tt Q1}.
