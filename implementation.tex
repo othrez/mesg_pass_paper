@@ -2,7 +2,7 @@
 \label{sec:optim}
 
 The tool is available on GitHub \cite{github.MPass}.
-It includes the sources files, protocols specifications in \xml\ and user manual.
+It includes sources files, protocols specifications in \Xml\ and the user manual.
 %
 \MPass\ tool is implemented in \texttt{C++} with the help of \texttt{lemon} and \texttt{pugixml} libraries.
 %
@@ -20,11 +20,11 @@ The first task of \MPass\ is to translate the protocol into a set of Non-Determi
 It does so by parsing the \Xml\ file which path is given as input in the \texttt{settings} file (using the \texttt{plugixml} library).
 %
 Then, it makes use of the \texttt{lemon} library to translate the protocol into a set of \Nfa,
-each one defining one process from the protocol.
+each \Nfa\ defining one process from the protocol.
 %
 For each such generated \Nfa, \MPass\ proceeds by extracting two automata,
 one containing all except the receive transitions (\textit{send copy} of that process),
-the other containing all except the send transitions (\textit{receive copy} of that process).
+the other one containing all except the send transitions (\textit{receive copy} of that process).
 %
 In total, \MPass\ would have extracted $2*N$ automata from the input protocol
 ($N$ being the number of processes composing the protocol).
@@ -32,53 +32,52 @@ In total, \MPass\ would have extracted $2*N$ automata from the input protocol
 \subsubsection*{From Automata to Quantifier-free Presburger Formulas.}
 The reachability problem of a given protocol state is analyzed by generating a \emph{quantifier-free Presburger formula}
 from the set of extracted send an receive automata.
+%
 The \Smt\ solver \texttt{z3} is then fed with the generated formula to check its satisfiability.
 %
-In order to generate the quantifier-free Presburger formula, a certain number variables have to be 
-defined for each transition of each extracted automata.
-This includes the \texttt{index}, the \texttt{occurrence} and the \texttt{match} variables {\bf [Give here the meaning of this variables]}.
-%
-Since the reachability analysis is carried under a certain phase bound $k$,
-\MPass\ generates variables for both send and receive copies of each process and then duplicates them \emph{k} times
-which are then further used to generate Presburger formulas.
-Thus, we have ignored the inefficient process of making multiple copies for each process as done in \cite{AAC13}.
-%
-More information regarding the translation of the bounded phase state reachability to the satisfiability of \emph{quantifier-free Presburger formula} can be found in \cite{AAC13}.
-
-If the \Smt-solver proves the the quantifier free Presburger formula to be satisfiable,
+If the \Smt-solver proves the quantifier free Presburger formula to be satisfiable,
 then the state is reachable and we have an unsafe condition.
-Otherwise, if the formula is unsatisfiable, then the state is unreachable for the given bound and the program is safe.
+Otherwise, the formula is unsatisfiable, the state is unreachable and the program is safe.
+%
+Note that the result of the reachability analysis should be interpreted with regard to the phase bound and with regard to the channel semantic
+under which the analysis has been carried.
 
-%\begin{figure}[h]
-%\begin{center}
-%\begin{tabular}{l@{\hspace{20pt}}}
-%$
-%\left(\occvarof{\transition}=1\right)
-%\wedge
-%\left(\occvarof{\transition'}=1\right)
-%\wedge
-%\left(\indexvarof{\transition}<\indexvarof{\transition'}\right)
-%\implies
-%\left(\matchingvarof{\transition}<\matchingvarof{\transition'}\right)
-%$.
-%\end{tabular}
-%\end{center}
-%\caption{An example of a \emph{quantifier-free Presburger formulas}}\label{fig:examples}
-%\end{figure}
+More information regarding the translation of the bounded phase state reachability to the satisfiability of \emph{quantifier-free Presburger formula} can be found in \cite{AAC13}, but here are some details concerning this translation.
+%
+In order to generate the quantifier-free Presburger formula,
+a certain number of variables need to be defined in order to encode states and transitions of every \Nfa.
+%
+This includes the \texttt{index}, the \texttt{occurrence} and the \texttt{match} variables.
+%
+Variables \texttt{index} are integer variables used in order to index all states of all automata,
+while \texttt{occurrence} are boolean variables that apply to transitions and tell if the transition has been taken or not with respect to a given run.
+%
+Variables \texttt{match} apply to receive transitions and check whether the receive transition matches a \textit{previous} send operation.
+%
+The order of visited states and fired transitions  along a run is encoded by ordering the indices (\texttt{index} variables) of the states.
+
 
 \subsubsection*{Optimisations.}
-Various optimizations were implemented in order to increase the efficiency of the approach described in  \cite{AAC13}:
+Various optimizations were implemented in order to increase the efficiency of the approach described in  \cite{AAC13} and implemented in \alternator\ \cite{github.alternator}:
 
 \begin{description}
 \item{\textbf{Reduction of the number of copies per process:}}
-If $k$ is the phase bound, the original approach consisted in making $k$ copies of each process from the protocol specification.
+Since the reachability analysis is carried under a certain phase bound $k$, the original approach consisted in making $k$ copies of each process from the protocol specification.
 Instead of that, we make only two copies per process (send and receive copies).
+\MPass\ then generates variables for both send and receive copies of each process and duplicates them \emph{k} times which are then further used to generate the Presburger formula.
+%
+Thus, by duplicating variables instead of processes, we have saved space and time during the Presburger formula generation phase.
+%we have ignored the inefficient process of making $2*k$ copies for each process as it is described in \cite{AAC13} and as it was implemented in \texttt{alternator} \cite{github.alternator}.
 %
 \item{\textbf{Removal of strongly connected components:}}
-We evaluate all the sets of strongly connected components in the send copy of each process. 
-Then, we replace each strongly connected component by two new states.
-We add a send operation between these two newly added states if this operation appears in the set of strongly connected component transitions.
-The first of these two new states will be the entering point, or state, for any transition inbounding this strongly connected component.
-The other state (final state) will be  the source state for all transitions leaving from the previous strongly connected component.
-Thus, the number of states per process is reduced, which, in consequence, reduces the number of variables in the \Smt-formula.
+We evaluate all the strongly connected components (\Scc) of the send copy of each process. 
+Then, we replace each \Scc\ by two new states.
+We add a send operation between these two newly added states if this operation appears in the set of \Scc\ transitions.
+The first of these two new states will be the entering point (state) for any transition inbounding this \Scc.
+The other state will be  the source state for all transitions leaving the previous \Scc.
+%
+Thus, the number of states and transitions per process is reduced, which, in consequence, reduces the number of generated variables and assertions in the \Smt-formula.
+\item{\textbf{Reduction of the number of assertions:}} The \texttt{z3} single command \texttt{create\_distinct\_statement} was used in order make all state indices distinct,
+thus replacing all assertions of the form \texttt{index(state$_{\texttt{1}}$) != index(state$_{\texttt{2}}$)}.
+This considerably reduced the number of assertions fed to the \Smt\ solver.
 \end{description}
