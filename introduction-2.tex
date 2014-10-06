@@ -67,7 +67,7 @@ run or on the size of the buffers.
 %
 Finally, it allows multiple processes to be running at the same time and allows an arbitrary number of context switches.
 
-A variant of this approach has been demonstrated in a prototype, \textsc{alternator} \cite{github.alternator}.
+A variant of this approach has been demonstrated in a prototype, \alternator\ \cite{github.alternator}.
 %
 The phase in this variant is \textit{global}, i.e. phases are defined not for each process, but for the whole system.
 %
@@ -77,9 +77,9 @@ The run of the program is composed of only one global phase if all other process
 %
 This variant is more coarse-grained than the local (per-process) approach.
 %
-The tool \textsc{alternator} proceeds in two steps in order to analyse the program.
+The tool \alternator\ proceeds in two steps in order to analyse the program.
 %
-First, it translates the bounded phase reachability problem of the program into the satisfiability problem of quantifier-free Presburger formula.
+First, it translates the bounded phase reachability problem of the program into the satisfiability problem of a quantifier-free Presburger formula.
 Second, it feeds the generated formula to an \Smt-solver.
 %
 This allows leveraging the full power of state-of-the-art
@@ -87,25 +87,32 @@ This allows leveraging the full power of state-of-the-art
 %
 %[Global phase vs Local phase]
 %
-The promising results of this prototype motivated its reimplementation into a more efficient tool, \MPass\, that we present in this paper.
+The promising results of this prototype motivated its reimplementation into a more efficient tool, \MPass, that we present here in this paper.
 
 \MPass\ turns the bounded phase state reachability verification task into a push-button exercise.
 Moreover, it comes with the following features:
 
 \begin{itemize}
 % input
-\item Users of \MPass\ can feed the tool with a protocol specification in \textsc{xml}, the target state for which the reachability analysis should be conducted, the semantic of the channel and the phase bound. Details of the input format are provided in section~\ref{sec:input}.
+\item Users of \MPass\ can feed the tool with:
+\begin{inparaenum}[i)]
+\item The protocol specification in \Xml,
+\item the target state for which the reachability analysis should be conducted,
+\item the semantic of the channel and
+\item the phase bound.
+\end{inparaenum}
+Details of the input format are provided in section~\ref{sec:input}.
 %
 \item \MPass\ can handle three different kinds of channel semantics: {\it lossy} (\Lcs), {\it stuttering} (\Slcs) and {\it multiset-unordered} (\Ucs) semantics which allow the messages inside the channels to be, respectively, lost, duplicated or re-ordered.
 % internal
 \item \MPass\ allows a local (per process) bounded phase analysis.
-This fine grained analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \textsc{alternator}.
+This fine grained analysis explores more behaviours than the global (per program) bounded phase analysis implemented in \alternator.
 %
 \item Several optimisations have been implemented in \MPass, in particular in the \Smt-formula generation phase (see section~\ref{sec:optim}).
 %
 \item \MPass\ uses the \textsc{z3} \Smt-solver \url{http://z3.codeplex.com}.
 % output qualitative
-\item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantics).
+\item If \MPass\ finds a bug then it is a real bug of the input program (under the considered channel semantic).
 %
 \item If the bound on the number of phases increases then the set of explored program behaviours increases.
 In the limit, every run of the programs can then be explored.
