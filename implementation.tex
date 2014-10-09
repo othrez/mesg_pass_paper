@@ -2,11 +2,11 @@
 \label{sec:optim}
 
 The tool is available on GitHub \cite{github.MPass}.
-It includes sources files, protocols specifications in \Xml\ and the user manual.
+It includes sources files, protocol specifications in \Xml\ and the user manual.
 %
 \MPass\ tool is implemented in \texttt{C++} with the help of \texttt{lemon} and \texttt{pugixml} libraries.
 %
-%In order to use \MPass, \textsc{z3} is also required.
+In order to use \MPass, the \Smt-solver \textsc{z3} is also required.
 
 \subsubsection*{From the \Xml\ protocol specification to Automata representation.}
 \label{subsec:copies}
@@ -15,7 +15,7 @@ Protocols are specified in \Xml\ files in the \texttt{Includes} sub-folder of th
 They can be modified in a simple manner by adding, modifying or removing the \Xml\ rules and
 new protocols can be specified by writing their specification into an \Xml\ file.
 %
-The first task of \MPass\ is to translate the protocol into a set of Non-Deterministic Finite Automaton (\Nfa).
+The first task of \MPass\ is to translate the protocol specification into a set of Non-Deterministic Finite Automaton (\Nfa).
 %
 It does so by parsing the \Xml\ file which path is given as input in the \texttt{settings} file (using the \texttt{plugixml} library).
 %
@@ -44,8 +44,7 @@ If the \Smt-solver proves the quantifier free Presburger formula to be satisfiab
 then the state is reachable and we have an unsafe condition.
 Otherwise, the formula is unsatisfiable, the state is unreachable and the program is safe.
 %
-Note that the result of the reachability analysis should be interpreted with regard to the phase bound and with regard to the channel semantic
-under which the analysis has been carried.
+Note that the result of the reachability analysis should be interpreted with regard to the phase bound and the channel semantic under which the analysis has been carried.
 
 More information regarding the translation of the bounded phase state reachability to the satisfiability of \emph{quantifier-free Presburger formula} can be found in \cite{AAC13}, but here are some details concerning this translation.
 %
@@ -59,7 +58,15 @@ while \texttt{occurrence} are boolean variables that apply to transitions and te
 %
 Variables \texttt{match} apply to receive transitions and check whether the receive transition matches a \textit{previous} send operation.
 %
-The order of visited states and fired transitions  along a run is encoded by ordering the indices (\texttt{index} variables) of the states.
+By enforcing that, for every two consecutive receiving transitions,
+the order through which the matching sending transitions happen is the same
+as the order through which the receiving transitions happen, we encode the first-in-first-out lossy semantic of the channels.
+%
+On the other hand, the encoding of the unordered semantic of the channels does not require any
+constraint on the channel.
+%
+The order of visited states and fired transitions along a run is encoded by ordering the indices (\texttt{index} variables) of the states.
+
 
 
 \subsubsection*{Optimisations.}
@@ -76,10 +83,11 @@ Thus, by duplicating variables instead of processes, we have saved space and tim
 %
 \item{\textbf{Removal of strongly connected components:}}
 We evaluate all the strongly connected components (\Scc) of the send copy of each process. 
-Then, we replace each \Scc\ by two new states.
-We add a send operation between these two newly added states if this operation appears in the set of \Scc\ transitions.
-The first of these two new states will be the entering point (state) for any transition inbounding this \Scc.
-The other state will be  the source state for all transitions leaving the previous \Scc.
+Then, we replace each \Scc\ by two new states, \sccin and \sccout.
+For every send operation occurring between two states in the \Scc,
+we add the same transition between \sccin and \sccout.
+\sccin will be the entering point for any transition inbounding this \Scc,
+while \sccout will be the source state for all transitions leaving the \Scc.
 %
 Thus, the number of states and transitions per process is reduced, which, in consequence, reduces the number of generated variables and assertions in the \Smt-formula.
 \item{\textbf{Reduction of the number of assertions:}} The \texttt{z3} single command \texttt{create\_distinct\_statement} was used in order make all state indices distinct,

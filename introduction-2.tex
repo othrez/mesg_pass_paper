@@ -49,16 +49,16 @@ A run of this program consists of only one phase if the following conditions are
 \item $p_2$ is either receiving or sending messages, but not both.
 \end{inparaenum}
 %
-If $p_1$ is only receiving (resp. sending) messages, we say that $p_1$ is in a local \textit{receiving} (resp. \textit{sending}) phase.
+If $p_1$ is only receiving (resp. sending) messages, we say that $p_1$ is in a \textit{receiving} (resp. \textit{sending}) phase.
 %
-In the case where one process (e.g. $p_1$) switches from receiving to sending or from sending to receiving,
-then two phases are needed in order to describe the run of the program.
+Say one process (e.g. $p_1$) switches from receiving to sending or from sending to receiving during a run of the system, then two phases are needed in order to describe the run of the process.
 %
-In that sense, a phase is \textit{local} to each process,
-and a run of the program contains one phase
+In that sense, a phase is \textit{local} to each process.
+%
+The run of the system as a whole is composed of only one phase
 if the run of each one of its processes is composed of only one local phase.
 %
-The number of send and receive operations within a phase is not bounded,
+Note that the number of send and receive operations within a phase is not bounded,
 and the number of channels to which processes are sending to (resp. receiving from)
 is only bounded by the number of channels composing the system.
 %
@@ -71,19 +71,20 @@ A variant of this approach has been demonstrated in a prototype, \alternator\ \c
 %
 The phase in this variant is \textit{global}, i.e. phases are defined not for each process, but for the whole system.
 %
-For instance, consider a run of the program where one process $p$ is performing receive and local actions only.
-Process $p$ is in a local receiving phase.
-The run of the program is composed of only one global phase if all other processes composing the program are also in a local receiving phase.
+%For instance, consider a run of the program where one process $p$ is performing receive and local actions only.
+%Process $p$ is in a local receiving phase.
+%The run of the program is composed of only one global phase if all other processes composing the program are also in a local receiving phase.
 %
-This variant is more coarse-grained than the local (per-process) approach.
+This variant is more coarse-grained than the local (per-process) phase bounding approach.
 %
-The tool \alternator\ proceeds in two steps in order to analyse the program.
+The tool \alternator\ proceeds in two steps in order to analyse the program within the phase bound.
 %
-First, it translates the bounded phase reachability problem of the program into the satisfiability problem of a quantifier-free Presburger formula.
+First, it translates the bounded phase reachability problem of the program to
+the satisfiability problem of a quantifier-free Presburger formula.
+%
 Second, it feeds the generated formula to an \Smt-solver.
 %
-This allows leveraging the full power of state-of-the-art
-\Smt-solvers for obtaining a very efficient solution to the bounded-phase reachability problem for all above mentioned semantics. 
+This allows leveraging the full power of state-of-the-art \Smt-solvers for obtaining a very efficient solution to the bounded-phase reachability problem for all above mentioned semantics. 
 %
 %[Global phase vs Local phase]
 %

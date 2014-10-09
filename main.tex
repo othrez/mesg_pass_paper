@@ -1,4 +1,5 @@
 \documentclass{llncs}
+\usepackage{etex}
 \usepackage{amsmath,amssymb,amsfonts,latexsym,stmaryrd}
 \usepackage[ruled,noend,nofillcomment,linesnumbered]{algorithm2e}
 \usepackage{pslatex}
@@ -19,7 +20,7 @@
 \usepackage[mathscr]{euscript}
 \usepackage{color}
 \usepackage{pifont}
-\usepackage{subfigure,multimedia}
+\usepackage{multimedia}
 \usepackage{delarray}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -36,6 +37,8 @@
 \usetikzlibrary{shapes}
 \usetikzlibrary{backgrounds,calc}
 \usepackage{paralist}
+\usepackage{upquote}
+\usepackage{subcaption}
 
 \sloppy
 
@@ -59,6 +62,8 @@
 \newcommand{\Slcs}{\textsc{Slcs}}
 \newcommand{\Ucs}{\textsc{Ucs}}
 
+\newcommand{\Fifo}{\textsc{Fifo}}
+
 \newcommand{\Nfa}{\textsc{Nfa}}
 
 \newcommand{\Abp}{\textsc{Abp}}
@@ -71,6 +76,9 @@
 \newcommand{\Scc}{\textsc{Scc}}
 
 \newcommand{\alternator}{\textsc{alternator}}
+
+\newcommand{\sccin}{$s_{\Scc}^{in}$}
+\newcommand{\sccout}{$s_{\Scc}^{out}$}
 
 \newcolumntype{"}{!{\vrule width 1pt}}
 
